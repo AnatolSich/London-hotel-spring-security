@@ -1,6 +1,6 @@
 package org.example.config;
 
-import org.example.auth.LandonUserDetailsService;
+import org.example.auth.LondonUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private LandonUserDetailsService userDetailsService;
+    private LondonUserDetailsService userDetailsService;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -36,6 +36,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/guests").hasAnyRole("REGISTERED_USER", "ADMIN_USER")
+                .antMatchers("/guests/add").hasRole("ADMIN_USER")
                 .antMatchers("/", "/index", "/css/*", "/js/*").permitAll()
                 .anyRequest().authenticated()
                 .and()

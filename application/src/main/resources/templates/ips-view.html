@@ -1,0 +1,34 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}"lang="en">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container main-content">
+        <div class="row">
+            <div class="col-7">
+                <h3>Failed ips</h3>
+            </div>
+        </div>
+        <table id="table" class="table table-striped table-sm">
+            <thead>
+                <th scope="col">#</th>
+                <th scope="col">ip</th>
+                <th scope="col">attempts</th>
+            </thead>
+            <tbody>
+                <tr th:each="ip, stat  : ${ips}">
+                    <th scope="row" th:text="${stat.index}"></th>
+                    <td th:text="${ip.ip}"></td>
+                    <td th:text="${ip.attempts}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/table.js}"></script>
+</div>
+</body>
+</html>

@@ -13,7 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.context.request.RequestContextListener;
+
+import java.security.SecureRandom;
 
 @Configuration
 @EnableWebSecurity
@@ -27,16 +31,17 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(11));
+        // BCrypt will internally generate a random salt
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(11, new SecureRandom()));
         provider.setAuthoritiesMapper(authoritiesMapper());
         return provider;
     }
 
     @Bean
-    public GrantedAuthoritiesMapper authoritiesMapper(){
+    public GrantedAuthoritiesMapper authoritiesMapper() {
         SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
         authorityMapper.setConvertToUpperCase(true);
-     //   authorityMapper.setDefaultAuthority("REGISTERED_USER");
+        //   authorityMapper.setDefaultAuthority("REGISTERED_USER");
         return authorityMapper;
     }
 
@@ -50,7 +55,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/", "/index", "/getAttemptsCache", "/css/*", "/js/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -60,5 +65,10 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/logout-success").permitAll();
+    }
+
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
     }
 }

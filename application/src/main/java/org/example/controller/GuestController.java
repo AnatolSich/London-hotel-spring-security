@@ -42,7 +42,7 @@ public class GuestController {
     }
 
     @GetMapping(value = "/guests")
-    @PreAuthorize("hasRole('ROLE_REGISTERED_USER')")
+    @PreAuthorize("hasRole('ROLE_REGISTERED_USER') or hasRole('ROLE_ADMIN_USER')")
     public String getGuests(Model model) {
         List<Guest> guests = this.guestService.getAllGuests();
         model.addAttribute("guests", guests);
@@ -65,7 +65,7 @@ public class GuestController {
     }
 
     @GetMapping(value = "/guests/{id}")
-    @PreAuthorize("hasRole('ROLE_REGISTERED_USER')")
+    @PreAuthorize("hasRole('ROLE_REGISTERED_USER') or hasRole('ROLE_ADMIN_USER')")
     public String getGuest(Model model, @PathVariable long id) {
         Guest guest = this.guestService.getGuest(id);
         model.addAttribute("guest", guest);
@@ -73,7 +73,7 @@ public class GuestController {
     }
 
     @PostMapping(value = "/guests/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN_USER')")
+    @PreAuthorize("hasRole('ROLE_REGISTERED_USER') or hasRole('ROLE_ADMIN_USER')")
     public String updateGuest(Model model, @PathVariable long id, @ModelAttribute GuestModel guestModel) {
         Guest guest = this.guestService.updateGuest(id, guestModel);
         model.addAttribute("guest", guest);

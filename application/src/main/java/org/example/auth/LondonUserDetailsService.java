@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LondonUserDetailsService implements UserDetailsService {
 
 
-    private  final LoginAttemptService loginAttemptService;
+    private final LoginAttemptService loginAttemptService;
 
     private final HttpServletRequest request;
 
@@ -30,7 +30,7 @@ public class LondonUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-     //   System.out.println(username);
+        //   System.out.println(username);
         final String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
             System.out.println("BLOCKED");
@@ -41,7 +41,7 @@ public class LondonUserDetailsService implements UserDetailsService {
         if (null == user) {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
-     //   System.out.println(user.toString());
+        //   System.out.println(user.toString());
         return user;
     }
 

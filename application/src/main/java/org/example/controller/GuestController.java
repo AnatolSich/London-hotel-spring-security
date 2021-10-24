@@ -42,13 +42,13 @@ public class GuestController {
         return "index";
     }
 
-    @GetMapping(value="/login")
-    public String getLoginPage(Model model){
+    @GetMapping(value = "/login")
+    public String getLoginPage(Model model) {
         return "login";
     }
 
-    @GetMapping(value="/logout-success")
-    public String getLogoutPage(Model model){
+    @GetMapping(value = "/logout-success")
+    public String getLogoutPage(Model model) {
         return "logout";
     }
 
@@ -95,20 +95,12 @@ public class GuestController {
     @GetMapping(value = "/getAttemptsCache")
     public String getAttemptsCache(Model model) {
         Map<String, Integer> ips = this.loginAttemptService.getAttemptsCache().asMap();
-        List <IpModel> ipModels = new ArrayList<>();
-        for (String key: ips.keySet()) {
+        List<IpModel> ipModels = new ArrayList<>();
+        for (String key : ips.keySet()) {
             ipModels.add(new IpModel(key, ips.get(key)));
         }
         model.addAttribute("ips", ipModels);
         return "ips-view";
-    }
-
-    @ExceptionHandler(BlockedException.class)
-    public void handleBlockedException(BlockedException ex, HttpServletResponse response) throws IOException {
-        System.out.println("handleBlockedException");
-        response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value(), "Access denied for some time");
-        //  response.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "Access denied for some time");
-        response.sendRedirect("/guests/add");
     }
 
 }

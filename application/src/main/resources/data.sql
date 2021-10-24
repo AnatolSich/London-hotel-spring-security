@@ -24,7 +24,7 @@ CREATE TABLE public.t_user_roles
 --     FOREIGN KEY (roles_id) REFERENCES t_role (id) ON DELETE CASCADE
 );
 
---'password'
+--'foobar' and 'password'
 INSERT INTO public.t_user(id, username, password)
 VALUES (1, 'user', '$2a$11$3NO32OV1TGjap3xMpAEjmuiizitWuaSwUYz42aMtlxRliwJ8zm4Sm'), (2, 'fpmoles', '$2a$11$dp4wMyuqYE3KSwIyQmWZFeUb7jCsHAdk7ZhFc0qGw6i5J124imQBi');
 
